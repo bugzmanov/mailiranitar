@@ -1,4 +1,8 @@
-## Requirements
+## Mailiranitar
+
+![image](https://user-images.githubusercontent.com/502482/86857154-e6991280-c08b-11ea-926a-9da32ef37599.png)
+
+Just like mailinator but with pokemons!
 
 ## Problem analysis
 
@@ -13,7 +17,7 @@ Response content type: `application/octet-stream`
 | ------------- |:-------------:| 
 | 200           | Successfull operation | 
 | 404           | No data for that key      | 
-| 500           | Service error      | 
+| 500           | Service error        | 
 
 
 ## Running instructions
@@ -22,9 +26,8 @@ Response content type: `application/octet-stream`
 ## Overall description
 
 * Runtime & Language: scala on JVM 
-* Webserver: akka-http (https://doc.akka.io/docs/akka-http/current/index.html)
-* Caching library: guava cache (https://github.com/google/guava/wiki/CachesExplained)
-* Monitoring: micrometer (https://micrometer.io/), graphite (https://graphiteapp.org/), grafana (https://grafana.com/grafana/)
+* Webserver: Finatra (https://twitter.github.io/finatra/)
+* Caching library: Caffeine (https://github.com/ben-manes/caffeine)
 * Performance tests: locust (https://locust.io/)
 
 ## Service design 
@@ -46,10 +49,6 @@ Constraints:
    - weak references drop - degraded case || auto-restart
 
 https://www.techempower.com/benchmarks/#section=data-r15&hw=ph&test=fortune
-
-## Monitoring & Alerting
-
-### Alerting conditions:
 
 ## Load testing
 
