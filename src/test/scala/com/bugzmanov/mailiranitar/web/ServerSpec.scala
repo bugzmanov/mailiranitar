@@ -1,4 +1,4 @@
-package com.bugzmanov.mailranitar.web
+package com.bugzmanov.mailiranitar.web
 
 import java.net.InetAddress
 import java.time.Instant

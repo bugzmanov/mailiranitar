@@ -2,53 +2,35 @@ package com.bugzmanov.mailiranitar.mail
 
 import java.time.Instant
 import java.util.UUID
-import java.util.concurrent.{ConcurrentLinkedDeque, ConcurrentLinkedQueue}
 
-import scala.collection.JavaConverters._
+import com.bugzmanov.mailiranitar.collection.mutable.{GuardedScannableList, HasUUID, ScannableLinkedList}
+import org.apache.http.annotation.ThreadSafe
 
-case class Message private(id: UUID,
-                           sender: String,
-                           subject: String,
-                           body: String,
-                           received: Instant,
-                           sent: Instant,
-                          ) {
-  override def hashCode(): Int = id.hashCode()
-
-  override def equals(obj: Any): Boolean = obj match {
-    case other: Message if other.id == this.id => true
-    case _ => false
-  }
-}
-
+/**
+ * Repository for messages stored for a mailbox. The mail box can store limited amount of mails.
+ * After reaching this threshold, mailbox silently drops the oldest messages
+ *
+ * @param email   mailbox email
+ * @param created date-time when mailbox was created
+ * @param maxSize the max amount of messages the mailbox can store,
+ */
+@ThreadSafe
 class MailBox(val email: String,
               val created: Instant,
               maxSize: Int) {
 
-  val queue = new ConcurrentLinkedDeque[Message]()
+  private implicit val message2Uuid = new HasUUID[Message] {
+    override def uuid(a: Message): UUID = a.id
+  }
+
+  val scannableList = new GuardedScannableList[Message](new ScannableLinkedList[Message](maxSize))
 
   def messages(from: Option[UUID] = None, count: Int = 10): Vector[Message] = {
-    val iter = queue.descendingIterator().asScala
-
-    from match {
-      case None =>
-        iter.take(count).toVector
-      case Some(id) =>
-        iter.dropWhile(m => m.id != id).take(count).toVector
-    }
+    scannableList.getItems(from, count)
   }
 
   def delete(uuid: UUID): Option[Message] = {
-    val iter = queue.iterator()
-    while (iter.hasNext) {
-      val next = iter.next()
-      if (next.id == uuid) {
-        val response = Some(next)
-        iter.remove()
-        return response
-      }
-    }
-    None
+    scannableList.delete(uuid)
   }
 
   def add(sender: String, subject: String, body: String, sent: Instant): Option[Message] = {
@@ -59,25 +41,12 @@ class MailBox(val email: String,
       received = Instant.now(),
       sent = sent)
 
-    queue.offer(message)
-
-    while (queue.size() > maxSize) {
-      queue.poll()
-    }
+    scannableList.addLast(message)
 
     Some(message)
   }
 
   def get(uuid: UUID): Option[Message] = {
-    val iter = queue.iterator().asScala.dropWhile(m => m.id != uuid)
-    if (iter.hasNext) {
-      Some(iter.next())
-    } else {
-      None
-    }
+    scannableList.get(uuid)
   }
-
-  def size: Int = queue.size()
 }
-
-

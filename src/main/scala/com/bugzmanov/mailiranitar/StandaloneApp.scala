@@ -1,6 +1,6 @@
 package com.bugzmanov.mailiranitar
 
-import com.bugzmanov.mailiranitar.mail.MailSystem
+import com.bugzmanov.mailiranitar.mail.MailBoxRegistry
 import com.bugzmanov.mailiranitar.web.MailiranitarServer
 
 //https://bulbapedia.bulbagarden.net/wiki/Tyranitar_(Pok%C3%A9mon)
@@ -12,17 +12,18 @@ object StandaloneApp extends MailiranitarServer(
 }
 
 object Context {
+
   import scala.concurrent.duration._
 
   val config = ServerConfig(
     domainName = "ololo.com",
-    mailConfig = MailSystemConfig (
+    mailConfig = MailSystemConfig(
       mailBoxTTL = 15 minutes,
-      maxMailBoxSize = 30,
-      messagesPageSize =  10,
-      maxNumberOfMailBoxes = 200
+      maxMailBoxSize = 50,
+      messagesPageSize = 10,
+      maxNumberOfMailBoxes = 5000
     )
   )
 
-  val mailSystem = new MailSystem(config.domainName, config.mailConfig)
+  val mailSystem = new MailBoxRegistry(config.domainName, config.mailConfig)
 }

@@ -6,12 +6,29 @@ import java.util.concurrent.TimeUnit
 
 import com.bugzmanov.mailiranitar.MailSystemConfig
 import com.github.benmanes.caffeine.cache.{Caffeine, Scheduler}
+import org.apache.http.annotation.ThreadSafe
 
 
 case class MailBoxStat(email: String,
                        expires: Instant)
 
-class MailSystem(domainName: String, mailConfig: MailSystemConfig) {
+/**
+ * Central repository for all mailboxes in the system.
+ * The repository is responsible for:
+ * - generating new mailboxes
+ * - providing access to existing mailboxes
+ * - expiring existing mailboxes based on {@see MailSystemConfig#mailBoxTTL} and {@see MailSystemConfig#maxNumberOfMailBoxes}
+ *
+ * TTL of a mailbox is counted from the time of creation.
+ *
+ * When the amount of mailboxes are close to {@see MailSystemConfig#maxNumberOfMailBoxes} the registry drops entries
+ * that are less likely to be used again
+ *
+ * @param domainName
+ * @param mailConfig
+ */
+@ThreadSafe
+class MailBoxRegistry(domainName: String, mailConfig: MailSystemConfig) {
 
   private val cache = Caffeine.newBuilder()
     .scheduler(Scheduler.systemScheduler())
@@ -38,6 +55,5 @@ class MailSystem(domainName: String, mailConfig: MailSystemConfig) {
     }
   }
 
-  //todo: check if uuid valid for emails
-  def generateEmail(): String = s"${UUID.randomUUID().toString}@$domainName"
+  private def generateEmail(): String = s"${UUID.randomUUID().toString}@$domainName"
 }

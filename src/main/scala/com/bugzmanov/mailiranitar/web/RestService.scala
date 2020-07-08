@@ -4,7 +4,7 @@ import java.time.Instant
 import java.util.UUID
 
 import com.bugzmanov.mailiranitar.ServerConfig
-import com.bugzmanov.mailiranitar.mail.MailSystem
+import com.bugzmanov.mailiranitar.mail.MailBoxRegistry
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -22,7 +22,7 @@ private object CustomJacksonModule extends ScalaObjectMapperModule {
 }
 
 class MailiranitarServer(config: ServerConfig,
-                         mailSystem: MailSystem
+                         mailSystem: MailBoxRegistry
                         ) extends HttpServer {
   override def jacksonModule: Module = CustomJacksonModule
 
@@ -44,7 +44,7 @@ case class PageIter[T](data: Vector[T], links: PageLink)
 case class DeleteMessageResponse(id: UUID, success: Boolean)
 
 
-class MailRestController(mailSystem: MailSystem) extends Controller {
+class MailRestController(mailSystem: MailBoxRegistry) extends Controller {
 
   post(route = "/mailboxes") { request: Request =>
     mailSystem.generateMailBox()

@@ -18,11 +18,11 @@ def post_message_ind(task_set):
 
     try:
         message_id = resp.json()['id']
+        if task_set.mailbox in global_message_list:
+            global_message_list[task_set.mailbox].append(message_id)
     except:
         pass
 
-    if task_set.mailbox in global_message_list:
-        global_message_list[task_set.mailbox].append(message_id)
 
 
 
@@ -48,6 +48,9 @@ class SequenceOfTasks(SequentialTaskSet):
             return
 
         messages = global_message_list[self.mailbox]
+        if not messages:
+            return
+
         data = self.client.get("/mailboxes/" + self.mailbox + "/messages?from=" + random.choice(messages),
                        name = "read messages by page")
 
@@ -56,6 +59,9 @@ class SequenceOfTasks(SequentialTaskSet):
         if not self.mailbox in global_message_list:
             return
         messages = global_message_list[self.mailbox]
+        if not messages:
+            return
+
         mid = random.choice(messages)
         # self.messages.remove(mid)
         self.client.get("/mailboxes/" + self.mailbox + "/messages/" + mid, name = "read message")
@@ -67,6 +73,9 @@ class SequenceOfTasks(SequentialTaskSet):
         # for _ in range(2):
 
         messages = global_message_list[self.mailbox]
+        if not messages:
+            return
+
         mid = random.choice(messages)
         global_message_list[self.mailbox].remove(mid)
         self.client.delete("/mailboxes/" + self.mailbox + "/messages/" + mid, name = "delete message")
