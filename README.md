@@ -4,38 +4,6 @@
 
 <span>Just like _mailinator_ but with pokemons!</span>
 
-## Problem analysis
-
-
-## Protocol specification
-
-* Create a new, random email address:
-
-`POST /mailboxes` 
-
-
-* Create a new message for a specific email address:
-
-`POST /mailboxes/{email address}/messages` 
-
-
-* Retrieve an index of messages sent to an email address, including sender, subject, and id, in recency order. Support cursor-based pagination through the index:
-
-`GET /mailboxes/{email address}/messages` 
-
-* Retrieve a specific message by id:
-
-`GET /mailboxes/{email address}/messages/{message id}` 
-
-
-* Delete a specific email address and any associated messages:
-
-`DELETE /mailboxes/{email address}` 
-
-* Delete a specific message by id:
-
-`DELETE /mailboxes/{email address}/messages/{message id}` 
-
 
 ## Running instructions
 
@@ -100,9 +68,13 @@ The decision is to use finatra framework for this layer:
 1. Finatra is relatively high on popular performance benchmarks (https://www.techempower.com/benchmarks/#section=data-r15&hw=ph&test=fortune
 ). 
 Finatra is the topmost framework in the list that is:
+
     a) mature (lindy-effect)
+    
     b) JVM based
+    
     c) easy to get going 
+    
     d) high-level (using raw netty would get better performance, but would be impossible for me to finish the task in 7 hours)
     
 2. Finatra provides basic monitoring capabilities out of the box (ideally I would prefer to build a monitoring system from scratch using micrometer library, but 7 hrs)
@@ -216,6 +188,18 @@ Type                 Name                                                       
 ```
  
 This looks surprisingly slow, to be honest. I would need some time to look into it
+
+## Protocol specification
+
+| <div style="width:890px">HTTP API</div> | Description | 
+| ------------------ | --------------- | 
+| `POST /mailboxes`  | Create a new, random email address | 
+| `POST /mailboxes/{email_address}/messages` | Create a new message for a specific email address| 
+| `GET /mailboxes/{email_address}/messages` | Retrieve an index of messages sent to an email address, including sender, subject, and id, in recency order. Support cursor-based pagination through the index | 
+| `GET /mailboxes/{email_address}/messages/{message_id}` | Retrieve a specific message by id |
+| `DELETE /mailboxes/{email_address}` | Delete a specific email address and any associated messages |
+| `DELETE /mailboxes/{email_address}/messages/{message_id}` | Delete a specific message by id |
+
 
 ## Implementation plan
 
