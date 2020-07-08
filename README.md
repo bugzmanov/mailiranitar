@@ -1,6 +1,6 @@
 ## Mailiranitar
 
-![image](https://user-images.githubusercontent.com/502482/86857154-e6991280-c08b-11ea-926a-9da32ef37599.png)
+![image](https://user-images.githubusercontent.com/502482/86857650-f107dc00-c08c-11ea-94e4-8c578d88bc42.png)
 
 Just like mailinator but with pokemons!
 
