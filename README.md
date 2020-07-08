@@ -1,8 +1,8 @@
-## Mailiranitar
+## Disposable email address service
 
 ![image](https://user-images.githubusercontent.com/502482/86857650-f107dc00-c08c-11ea-94e4-8c578d88bc42.png)
 
-Just like mailinator but with pokemons!
+<span>Just like _mailinator_ but with pokemons!</span>
 
 ## Problem analysis
 
@@ -56,7 +56,7 @@ https://github.com/bugzmanov/mailiranitar/blob/master/locust/locustfile.py
 
 ## Implementation plan
 
-0. Design
-1. Core
-2. Rest api
-3. Monitoring
+0. [x] Design     
+1. [x] Core       
+2. [x] Rest api   
+3. [ ] Monitoring 
