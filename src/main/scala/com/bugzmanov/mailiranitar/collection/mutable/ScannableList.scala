@@ -75,7 +75,6 @@ private[mutable] class LinkedList[T] {
   }
 
   def addLast(t: T): Node[T] = {
-
     if (head == null) {
       val node = new Node(t)
       this.head = node;
@@ -88,7 +87,6 @@ private[mutable] class LinkedList[T] {
     this.tail.next = node
     this.tail = node
     node
-
   }
 
   def remove(node: Node[T]): Unit = {
@@ -117,11 +115,8 @@ private[mutable] class LinkedList[T] {
 
 trait ScannableList[ID, T] {
   def addLast(t: T): Option[T]
-
   def get(id: ID): Option[T]
-
   def delete(id: ID): Option[T]
-
   def getItems(from: Option[ID], count: Int): Vector[T]
 }
 
@@ -193,6 +188,7 @@ class GuardedScannableList[T: HasUUID](delegate: ScannableList[UUID, T]) extends
 
   private val lock = new StampedLock
 
+  @inline
   private def underReadLock[K](f: => K): K = {
     var stamp: Long = 0
     while (stamp == 0) {
@@ -205,6 +201,7 @@ class GuardedScannableList[T: HasUUID](delegate: ScannableList[UUID, T]) extends
     }
   }
 
+  @inline
   private def underWriteLock[K](f: => K): K = {
     var stamp: Long = 0
     while (stamp == 0) {

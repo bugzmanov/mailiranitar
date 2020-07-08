@@ -5,7 +5,7 @@ import java.time.Instant
 
 import com.bugzmanov.mailiranitar.Context
 import com.bugzmanov.mailiranitar.mail.{MailBoxStat, Message}
-import com.bugzmanov.mailiranitar.web.{MailiranitarServer, PageIter}
+import com.bugzmanov.mailiranitar.web.api.PageIter
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.twitter.finagle.Http

@@ -15,6 +15,21 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
+package api {
+  case class PostMessage(@RouteParam("email") recipient: String,
+                         @JsonProperty sender: String,
+                         @JsonProperty subject: String,
+                         @JsonProperty sent: Instant,
+                         @JsonProperty body: String)
+
+  case class PageLink(next: Option[String])
+
+  case class PageIter[T](data: Vector[T], links: PageLink)
+
+  case class DeleteMessageResponse(id: UUID, success: Boolean)
+
+}
+
 private object CustomJacksonModule extends ScalaObjectMapperModule {
   override def additionalMapperConfiguration(mapper: ObjectMapper): Unit = {
     mapper.registerModule(new JavaTimeModule())
@@ -31,20 +46,9 @@ class MailiranitarServer(config: ServerConfig,
   }
 }
 
-case class PostMessage(@RouteParam("email") recipient: String,
-                       @JsonProperty sender: String,
-                       @JsonProperty subject: String,
-                       @JsonProperty sent: Instant,
-                       @JsonProperty body: String)
-
-case class PageLink(next: Option[String])
-
-case class PageIter[T](data: Vector[T], links: PageLink)
-
-case class DeleteMessageResponse(id: UUID, success: Boolean)
-
-
 class MailRestController(mailSystem: MailBoxRegistry) extends Controller {
+
+  import com.bugzmanov.mailiranitar.web.api._
 
   post(route = "/mailboxes") { request: Request =>
     mailSystem.generateMailBox()
@@ -105,7 +109,7 @@ class MailRestController(mailSystem: MailBoxRegistry) extends Controller {
     }
   }
 
-  def generateLoadMessagesUrl(email: String, fromId: UUID): String = {
+  private def generateLoadMessagesUrl(email: String, fromId: UUID): String = {
     s"/mailboxes/${email}/messages?from=${fromId}"
   }
 }

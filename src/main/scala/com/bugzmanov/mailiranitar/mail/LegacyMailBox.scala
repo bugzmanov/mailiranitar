@@ -19,6 +19,7 @@ import scala.collection.JavaConverters._
  *
  * TODO: this class does 2 things: serves as data-structure and as mailbox. Potentially needs to be split
  * WARNING: class has a race condition
+ * WARNING: this class has suboptimal performance characteristic for all operations (time complexity = O(n))
  */
 @ThreadSafe
 @Deprecated
@@ -63,7 +64,7 @@ class LegacyMailBox(val email: String,
     queue.offer(message)
 
     // TODO queue.size() is not constant
-    while (queue.size() > maxSize) { //TODO: check-tnen-act race condition
+    while (queue.size() > maxSize) { //TODO: check-then-act race condition
       queue.poll()
     }
 

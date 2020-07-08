@@ -80,6 +80,13 @@ Finatra is the topmost framework in the list that is:
 2. Finatra provides basic monitoring capabilities out of the box (ideally I would prefer to build a monitoring system from scratch using micrometer library, but 7 hrs)
 
 
+Shortcuts:
+
+* I'm butchering REST API. Ideally resources needs to be packaged in proper message envelopes that can deliver errors as well
+as payload.
+* For mail pagination I'm providing only forward links ("next")
+* I'm simplifying a lot how a message can look like (omitting details like attachments, headers, etc.)
+
 ### MailboxRegistry
 
 MailboxRegistry is responsible for keeping track of existing mailboxes, managing their lifecycle, and providing access to individual mailboxes.

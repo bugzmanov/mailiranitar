@@ -7,7 +7,7 @@ import com.bugzmanov.mailiranitar.collection.mutable.{GuardedScannableList, HasU
 import org.apache.http.annotation.ThreadSafe
 
 /**
- * Repository for messages stored for a mailbox. The mail box can store limited amount of mails.
+ * Repository for messages stored in a mailbox. The mail box can store limited amount of mails.
  * After reaching this threshold, mailbox silently drops the oldest messages
  *
  * @param email   mailbox email
@@ -42,8 +42,6 @@ class MailBox(val email: String,
       sent = sent)
 
     scannableList.addLast(message)
-
-    Some(message)
   }
 
   def get(uuid: UUID): Option[Message] = {
